@@ -1,0 +1,25 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+# These files are text and should be normalized
+*.js text
+*.jsx text
+*.json text
+*.md text
+*.html text
+*.css text
+*.yml text
+*.yaml text
+# These files are binary and should not be modified
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.eot binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.exe filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.tar.gz filter=lfs diff=lfs merge=lfs -text
+**/terraform/providers/** filter=lfs diff=lfs merge=lfs -text
+**/node_modules/** filter=lfs diff=lfs merge=lfs -text
