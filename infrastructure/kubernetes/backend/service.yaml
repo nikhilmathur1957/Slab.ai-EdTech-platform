@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: slab-ai-backend
+  labels:
+    app: slab-ai-backend
+spec:
+  selector:
+    app: slab-ai-backend
+  ports:
+  - port: 80
+    targetPort: 3001
+    protocol: TCP
+  type: ClusterIP

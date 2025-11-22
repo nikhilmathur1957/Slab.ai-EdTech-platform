@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slab-ai-frontend
+  labels:
+    app: slab-ai-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: slab-ai-frontend
+  template:
+    metadata:
+      labels:
+        app: slab-ai-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: 975050024946.dkr.ecr.ca-central-1.amazonaws.com/slab-ai-dev-dev-frontend:latest
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
