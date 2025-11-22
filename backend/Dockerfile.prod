@@ -1,0 +1,17 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install --only=production
+
+COPY src/ ./src/
+
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S slab-ai -u 1001
+
+USER slab-ai
+
+EXPOSE 3001
+
+CMD ["node", "src/server.js"]
