@@ -36,7 +36,7 @@ variable "single_nat_gateway" {
 variable "eks_cluster_version" {
   description = "Kubernetes version for EKS cluster"
   type        = string
-  default     = "1.28"
+  default     = "1.29"
 }
 
 variable "eks_instance_types" {
