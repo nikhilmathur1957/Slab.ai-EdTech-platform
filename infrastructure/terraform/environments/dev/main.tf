@@ -50,7 +50,14 @@ module "ecr" {
 # Additional resources for the dev environment
 
 # ECR Repository for MongoDB (if needed)
+
+data "aws_ecr_repository" "maybe" {
+  name = "${local.name_prefix}-dev-mongodb"
+}
+
 resource "aws_ecr_repository" "mongodb" {
+  count = can(data.aws_ecr_repository.maybe.id) ? 0 : 1
+
   name = "${local.name_prefix}-dev-mongodb"
 
   image_scanning_configuration {
@@ -58,9 +65,6 @@ resource "aws_ecr_repository" "mongodb" {
   }
 
   tags = local.common_tags
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 # IAM Role for EKS cluster access
