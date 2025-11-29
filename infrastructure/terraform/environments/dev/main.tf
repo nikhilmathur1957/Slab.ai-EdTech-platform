@@ -58,6 +58,9 @@ resource "aws_ecr_repository" "mongodb" {
   }
 
   tags = local.common_tags
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 # IAM Role for EKS cluster access
