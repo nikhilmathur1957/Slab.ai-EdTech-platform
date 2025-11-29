@@ -68,7 +68,15 @@ resource "aws_ecr_repository" "mongodb" {
 }
 
 # IAM Role for EKS cluster access
+
+data "aws_iam_role" "maybe" {
+  name = "${local.name_prefix}-dev-eks-admin"
+}
+
 resource "aws_iam_role" "eks_admin" {
+  # If role exists, skip creation
+  count = data.aws_iam_role.maybe.id != "" ? 0 : 1
+
   name = "${local.name_prefix}-dev-eks-admin"
 
   assume_role_policy = jsonencode({
@@ -86,6 +94,7 @@ resource "aws_iam_role" "eks_admin" {
 
   tags = local.common_tags
 }
+
 
 resource "aws_iam_role_policy_attachment" "eks_admin" {
   role       = aws_iam_role.eks_admin.name
