@@ -18,7 +18,7 @@ function App() {
 
   const checkAPIHealth = async () => {
     try {
-      const response = await fetch('http://localhost:3001/health')
+      const response = await fetch('/health')
       if (response.ok) {
         const data = await response.json()
         setHealthStatus('healthy')
@@ -31,7 +31,7 @@ function App() {
 
   const fetchLeads = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/leads')
+      const response = await fetch('/api/leads')
       const result = await response.json()
       if (result.status === 'success') {
         setLeads(result.data.leads)
@@ -43,7 +43,7 @@ function App() {
 
   const fetchCourses = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/courses')
+      const response = await fetch('/api/courses')
       const result = await response.json()
       if (result.status === 'success') {
         setCourses(result.data.courses)
@@ -56,9 +56,8 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setFormStatus('sending')
-    
     try {
-      const response = await fetch('http://localhost:3001/api/leads', {
+      const response = await fetch('/api/leads', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +129,6 @@ function App() {
           </div>
         </div>
       </nav>
-
       {!showDashboard ? (
         /* Hero Section */
         <section className="hero">

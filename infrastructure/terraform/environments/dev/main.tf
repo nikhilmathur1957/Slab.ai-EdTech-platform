@@ -1,6 +1,5 @@
 # SLAB.AI Dev Environment
 # Integrates all infrastructure modules
-
 module "vpc" {
   source = "../../modules/vpc"
 
@@ -10,7 +9,6 @@ module "vpc" {
   enable_nat_gateway  = var.enable_nat_gateway
   tags                = local.common_tags
 }
-
 module "eks" {
   source = "../../modules/eks"
 
@@ -23,7 +21,6 @@ module "eks" {
   max_size        = 3
   tags            = local.common_tags
 }
-
 module "s3" {
   source = "../../modules/s3"
 
@@ -37,7 +34,6 @@ module "ecr" {
   name_prefix = "${local.name_prefix}-dev"
   tags        = local.common_tags
 }
-
 # CloudFront commented out due to learner account restrictions
 # module "cloudfront" {
 #   source = "../../modules/cloudfront"
@@ -46,18 +42,9 @@ module "ecr" {
 #   s3_bucket_domain_name   = module.s3.web_bucket_domain_name
 #   tags                    = local.common_tags
 # }
-
 # Additional resources for the dev environment
-
 # ECR Repository for MongoDB (if needed)
-
-data "aws_ecr_repository" "maybe" {
-  name = "${local.name_prefix}-dev-mongodb"
-}
-
 resource "aws_ecr_repository" "mongodb" {
-  count = can(data.aws_ecr_repository.maybe.id) ? 0 : 1
-
   name = "${local.name_prefix}-dev-mongodb"
 
   image_scanning_configuration {
@@ -68,15 +55,7 @@ resource "aws_ecr_repository" "mongodb" {
 }
 
 # IAM Role for EKS cluster access
-
-data "aws_iam_role" "maybe" {
-  name = "${local.name_prefix}-dev-eks-admin"
-}
-
 resource "aws_iam_role" "eks_admin" {
-  # If role exists, skip creation
-  count = data.aws_iam_role.maybe.id != "" ? 0 : 1
-
   name = "${local.name_prefix}-dev-eks-admin"
 
   assume_role_policy = jsonencode({
@@ -94,7 +73,6 @@ resource "aws_iam_role" "eks_admin" {
 
   tags = local.common_tags
 }
-
 
 resource "aws_iam_role_policy_attachment" "eks_admin" {
   role       = aws_iam_role.eks_admin.name
